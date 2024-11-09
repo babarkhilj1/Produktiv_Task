@@ -1,0 +1,72 @@
+# Application configuration
+app:
+  name: enterprise-sso
+  version: 1.0.0
+  env: development
+  port: 8080
+  debug: true
+  allowed_origins:
+    - http://localhost:3000
+
+
+
+# Microsoft Entra ID configuration
+microsoft:
+  tenant_id: "8695b83d-c692-47ef-ad7a-376cbce3664f"
+  client_id: "aa959e25-5b12-4cae-b6ce-ff9ec759f41e"
+  client_secret: "e16a5b8a-5d03-4aa3-8be3-c693b3533ed2"
+  redirect_uri: -
+  authority: "https://login.microsoftonline.com/8695b83d-c692-47ef-ad7a-376cbce3664f"
+  
+  scopes:
+    - openid
+    - profile
+    - email
+    - User.Read
+
+# Keycloak configuration updated with Microsoft identity provider
+keycloak:
+  server_url: "http://localhost:8081"
+  realm: "master"
+  client_id: "aa959e25-5b12-4cae-b6ce-ff9ec759f41e"
+  client_secret: "e16a5b8a-5d03-4aa3-8be3-c693b3533ed2"
+  public_key: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuZre+pvjlA3TOxj8LQVvuHldm8bU2/sB6ie4C/tgF8eQ+GMdxz34NpJx3RdlvVaMM6hElD7Jx7FZ4jUrQ2WAGFSZMvGXxe40xgzUjowS67izK8+FGo08h79nCEeDJ+6xlxO6HuK3VGlfwN0K9paWg6AXs3mzsoYa2HEvurYTXdlsLNCqxsiTskpw6aX0w0lHsSh62d86yuYurDpqe8RcZ3TqqCShm6nIhswlr6tPfWIGQJoJG6KIqE8E24cgAj2G6y+QKrrc+yyWWMH4LkMcpIcyKoShJVpz71HWwAaXmGWD/p2AnOip/rPBCq7ozyHm9xjxjTXsMPYCYPSLA29I8wIDAQAB" # RSA Public Key from realm
+  admin:
+    username: Divya Pratap Singh
+    password: Glasses29
+    realm: master
+  identity_providers:
+    microsoft:
+      enabled: true
+      client_id: ${microsoft.client_id}
+      client_secret: ${microsoft.client_secret}
+      default_scopes: ${microsoft.scopes}
+      gui_order: 1
+      first_broker_login_flow_alias: first broker login
+      post_broker_login_flow_alias: post broker login
+
+# Database configuration
+database:
+  postgres:
+    host: localhost
+    port: 5433
+    name: sso_db
+    user: postgres
+    password: Glasses29
+    ssl_mode: disable
+    max_open_conns: 25
+    max_idle_conns: 5
+
+# Redis configuration
+redis:
+  host: localhost
+  port: 6379
+  password: ""
+  db: 0
+  pool_size: 10
+  min_idle_conns: 5
+
+# Session configuration
+session:
+  token_expiry: 24h
+  cleanup_interval: 1h
